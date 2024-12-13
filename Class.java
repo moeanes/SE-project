@@ -3,6 +3,11 @@ public class Class {
     public int capacity;
     public Course[] courses;
 
+    public Class(String className, int capacity) {
+        this.className = className;
+        this.capacity = capacity;
+    }
+
     public Class(String className, int capacity, Course[] courses) {
         this.className = className;
         this.capacity = capacity;
