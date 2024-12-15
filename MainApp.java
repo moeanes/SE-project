@@ -11,16 +11,18 @@ public class MainApp {
         List<String> readClassFile = readCSVFile("Data/CLassroomCapacity.csv");
         List<Class> classes = createClass(readClassFile);
 
-        //printClass(classes);
 
         List<String> readCoursesFile = readCSVFile("Data/Courses.csv");
         List<Course> courses = createCourse(readCoursesFile, 45, 10);
 
-        //printCourses(courses);
-
         List<Student> studentList = createStudents(courses);
+        setCoursetoClass(classes,courses);
 
+
+        printClass(classes);
+        printCourses(courses);
         printStudents(studentList);
+
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -37,20 +39,50 @@ public class MainApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                createGUI(classes, courses);
+                createGUI(classes, courses, studentList);
             }
         });
     }
 
     private static void setCoursetoClass(List<Class> classes, List<Course> courses) {
-
+        for(Course course : courses) {
+            for(Class clss : classes) {
+                if(course.getStudents().size() > clss.getCapacity()) {
+                    System.out.println("Capacity full " + course.getCourseName() + " : " + clss.getClassName());
+                } else {
+                    Boolean check = true;
+                    for(Course schCourse : clss.getCourses()) {
+                        if(course.getDay().equals(schCourse.getDay())) {
+                            if(course.getTimeStart() >= schCourse.getTimeStart() && course.getTimeStart() <= schCourse.getTimeEnd()) {
+                                check = false;
+                                System.out.println("Between Start " + course.getCourseName() + " : " + clss.getClassName());
+                            } else if(course.getTimeEnd() >= schCourse.getTimeStart() && course.getTimeEnd() <= schCourse.getTimeEnd()) {
+                                check = false;
+                                System.out.println("Between End " + course.getCourseName() + " : " + clss.getClassName());
+                            }
+                        } else {
+                            System.out.println("Different Day " + course.getCourseName() + " : " + clss.getClassName());
+                        }
+                    }
+                    if(check) {
+                        clss.addCourse(course);
+                        course.setLessonClass(clss);
+                        System.out.println("Passed"  + course.getCourseName() + " : " + clss.getClassName());
+                        break;
+                    }
+                }
+            }
+        }
     }
 
-    private static void createGUI(List<Class> classList, List<Course> courseList) {
-        GrapInter ui = new GrapInter(classList, courseList);
+    private static void createGUI(List<Class> classList, List<Course> courseList,List<Student> studentList) {
+        GrapInter ui = new GrapInter(classList, courseList, studentList);
         JPanel root = ui.getRootPanel();
         JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ImageIcon img = new ImageIcon("logo2.png");
+        frame.setIconImage(img.getImage());
+        frame.setTitle("SE-Project");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setContentPane(root);
         frame.pack();
         frame.setVisible(true);
@@ -142,14 +174,17 @@ public class MainApp {
 
     private static void printClass(List<Class> classes) {
         for(Class c : classes) {
-            System.out.print(c.getClassName() + " - " + c.getCapacity());
+            System.out.print(c.getClassName() + " - " + c.getCapacity() + " - ");
+            for(Course crs : c.getCourses()) {
+                System.out.print("[" + crs.getCourseName() + "]");
+            }
             System.out.println();
         }
     }
 
     private static void printCourses(List<Course> courses) {
         for(Course c : courses) {
-            System.out.println(c.getCourseName() + " " + c.getDay() + " " + c.getTimeStart() + " " + c.getTimeEnd() + " " + c.getLecturerName());
+            System.out.println(c.getCourseName() + " " + c.getDay() + " " + c.getTimeStart() + " " + c.getTimeEnd() + " " + c.getLecturerName()  );
             for(String s: c.getStudents()) {
                 System.out.println("- " + s);
             }
@@ -163,7 +198,7 @@ public class MainApp {
             for(Course c: s.getLessons()) {
                 int second = c.getTimeStart();
                 int hour = second/(60*60);
-                second = second%(60*60);
+                second = second%(60*60)  ;
                 int minute = second/60;
                 System.out.print("[" + c.getCourseName() + "-" + hour + ":" + minute + "], ");
             }

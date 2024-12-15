@@ -1,6 +1,8 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class GrapInter extends JFrame {
@@ -15,8 +17,26 @@ public class GrapInter extends JFrame {
     private JTable table2;
 
 
-    public GrapInter(List<Class> classList, List<Course> courseList) {
+    public GrapInter(List<Class> classList, List<Course> courseList, List<Student> studentList) {
         createTable(classList, courseList);
+
+        studentListButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == studentListButton) {
+                    StudentList studentWindow = new StudentList(studentList);
+                    JPanel root = studentWindow.getRootPanel();
+                    JFrame frame = new JFrame();
+                    ImageIcon img = new ImageIcon("logo2.png");
+                    frame.setIconImage(img.getImage());
+                    frame.setTitle("Student List");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setContentPane(root);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        });
     }
 
     public JPanel getRootPanel() {
@@ -53,7 +73,7 @@ public class GrapInter extends JFrame {
             data2[counter2][3] = (hourEnd + ":" + minuteEnd);
             data2[counter2][4] = c.getLecturerName();
             data2[counter2][5] = c.getStudents().size();
-            data2[counter2][6] = c.getLessonClass();
+            data2[counter2][6] = c.getLessonClass().getClassName();
             counter2++;
         }
 
