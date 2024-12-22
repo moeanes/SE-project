@@ -1,6 +1,5 @@
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -18,7 +17,8 @@ public class GrapInter extends JFrame {
 
 
     public GrapInter(List<Class> classList, List<Course> courseList, List<Student> studentList) {
-        createTable(classList, courseList);
+        createTable1(classList);
+        createTable2(courseList);
 
         studentListButton.addActionListener(new ActionListener() {
             @Override
@@ -27,9 +27,77 @@ public class GrapInter extends JFrame {
                     StudentList studentWindow = new StudentList(studentList);
                     JPanel root = studentWindow.getRootPanel();
                     JFrame frame = new JFrame();
-                    ImageIcon img = new ImageIcon("logo2.png");
+                    ImageIcon img = new ImageIcon("logo3.png");
                     frame.setIconImage(img.getImage());
                     frame.setTitle("Student List");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setContentPane(root);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        });
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == addButton) {
+                    JFrame frame = new JFrame();
+                    addClassroom addClassroomButton = new addClassroom(frame, table1);
+                    JPanel root = addClassroomButton.getRootPanel();
+                    ImageIcon img = new ImageIcon("logo3.png");
+                    frame.setIconImage(img.getImage());
+                    frame.setTitle("Add Classroom");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setContentPane(root);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == deleteButton) {
+                    JFrame frame = new JFrame();
+                    deleteClassroom deleteClassroomButton = new deleteClassroom(frame,table1);
+                    JPanel root = deleteClassroomButton.getRootPanel();
+                    ImageIcon img = new ImageIcon("logo3.png");
+                    frame.setIconImage(img.getImage());
+                    frame.setTitle("Delete Classroom");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setContentPane(root);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        });
+        addButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == addButton1) {
+                    JFrame frame = new JFrame();
+                    addCourse addCourseButton = new addCourse(frame, table2);
+                    JPanel root = addCourseButton.getRootPanel();
+                    ImageIcon img = new ImageIcon("logo3.png");
+                    frame.setIconImage(img.getImage());
+                    frame.setTitle("Add Course");
+                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                    frame.setContentPane(root);
+                    frame.pack();
+                    frame.setVisible(true);
+                }
+            }
+        });
+        deleteButton1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource() == deleteButton1) {
+                    JFrame frame = new JFrame();
+                    deleteCourse deleteCourseButton = new deleteCourse(frame, table2);
+                    JPanel root = deleteCourseButton.getRootPanel();
+                    ImageIcon img = new ImageIcon("logo3.png");
+                    frame.setIconImage(img.getImage());
+                    frame.setTitle("Delete Course");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                     frame.setContentPane(root);
                     frame.pack();
@@ -43,7 +111,7 @@ public class GrapInter extends JFrame {
         return panel1;
     }
 
-    private void createTable(List<Class> classList, List<Course> courseList) {
+    private void createTable1(List<Class> classList) {
         Object[][] data = new Object[classList.size()][2];
         int counter = 0;
         for(Class c : classList) {
@@ -55,7 +123,11 @@ public class GrapInter extends JFrame {
                 data,
                 new String[]{"Classroom", "Capacity"}
         ));
+        table1.setEnabled(false);
 
+    }
+
+    private void createTable2(List<Course> courseList) {
         Object[][] data2 = new Object[courseList.size()][7];
         int counter2 = 0;
         for(Course c : courseList) {
@@ -82,7 +154,6 @@ public class GrapInter extends JFrame {
                 data2,
                 new String[]{"Course Name", "Day", "Start Time", "Finis Time", "Instructor", "Student Count", "Class"}
         ));
-
-
+        table2.setEnabled(false);
     }
 }

@@ -27,7 +27,7 @@ public class StudentList {
                     StudentSchedule scheduleWindow = new StudentSchedule(studentList.get(list1.getSelectedIndex()));
                     JPanel root = scheduleWindow.getRootPanel();
                     JFrame frame = new JFrame();
-                    ImageIcon img = new ImageIcon("logo2.png");
+                    ImageIcon img = new ImageIcon("logo3.png");
                     frame.setIconImage(img.getImage());
                     frame.setTitle(studentList.get(list1.getSelectedIndex()).getName() + " Schedule");
                     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
